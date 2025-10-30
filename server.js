@@ -8,7 +8,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://password-manager-usfv.vercel.app"
+    "https://password-manager-usfv-7ybt3btoi-shantannus-projects.vercel.app"
   ],
   methods: ["GET", "POST", "DELETE"],
   allowedHeaders: ["Content-Type"]
