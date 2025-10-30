@@ -2,6 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
+ bcrypt for one-way hashing (use genSalt + hash)
+const { genSalt, hash } = require('bcrypt');
+
+
 
 dotenv.config();
 const app = express();
@@ -45,7 +49,12 @@ connectDB();
 app.get("/", async (req, res) => {
   try {
     const passwords = await collection.find({}).toArray();
-    res.json(passwords);
+     // For safety, omit the password (even hashed) from responses sent to clients.
+    const safe = passwords.map(p => {
+      const { password, ...rest } = p;
+      return rest;
+    });
+    res.json(safe);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch passwords" });
   }
@@ -62,7 +71,13 @@ app.post("/", async (req, res) => {
   }
 
   try {
-    const result = await collection.insertOne(data);
+    // Hash the password before saving (one-way). If you need to show the
+    // plaintext back to the user later, use encryption instead of bcrypt.
+    const saltRounds = 10; // configurable via env if desired
+    const salt = await genSalt(saltRounds);
+    const hashed = await hash(String(data.password), salt);
+    const toInsert = { ...data, password: hashed };
+    const result = await collection.insertOne(toInsert);
     res.json({ message: "Password saved", id: result.insertedId });
   } catch (err) {
     res.status(500).json({ error: "Failed to insert password" });
