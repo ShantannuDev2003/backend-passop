@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
- bcrypt for one-way hashing (use genSalt + hash)
+// bcrypt for one-way hashing (use genSalt + hash)
 const { genSalt, hash } = require('bcrypt');
 
 
