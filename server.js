@@ -5,7 +5,11 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173", "https://password-manager-ashen-beta.vercel.app/"],
+  methods: ["GET", "POST", "DELETE"],
+}));
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000
