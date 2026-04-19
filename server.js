@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 app.use(cors({
   origin: [
-    "https://password-manager-pcol.vercel.app/"
+    "https://password-manager-pcol.vercel.app"
   ],
   methods: ["GET", "POST", "DELETE"],
   allowedHeaders: ["Content-Type"]
